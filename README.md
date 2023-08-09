@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Uniswap Eagle is an open-source application that uses ChainStack's subgraph to index data from Uniswap and displays a list of token pairs.
+Uniswap Eagle is an open-source application that uses Chainstack's subgraph to index data from Uniswap and displays a list of token pairs.
 
 ![dashboard](./uniswap-eagle.png)
 
@@ -33,3 +33,16 @@ cd node-frontend
 - **node-fetch** - to fetch data from the deployed subgraph through http requests
 - **express** - to simplify the nodejs build process
 - **dotenv** - to protect the Chainstack-Query URL used in the project
+
+## Chainstack Integration
+
+In order to effectively listen to the `PoolCreated` event emitted by the Uniswap-v3 Contract, there was a need to map the data stored on the blockchain and index the day into a more easily understandable and accessible format, and utilizing a subgraph is undoubtedly the best way to do it.
+
+### Why Chainstack Subgraph?
+
+Chainstack subgraph was particularly utilized to cut down on stalling response delays, with the goal of providing users with faster response and a smoother experience when querying uniswap data through Uniswap Eagle.
+
+## Upcoming Releases
+
+- _RealTime Data on all transactions based on Particular ETH Swaps_
+- _RealTime Data on Certain Contract Deployments_
