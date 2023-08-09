@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Uniswap Eagle🦅</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: inherit;
+      }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 5rem 5rem 10rem;
+        line-height: 1.7;
+        min-height: 100vh;
+        background-color: #181b20;
+        /* display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0; */
+      }
+
+      html {
+        font-size: 82.5%;
+        box-sizing: border-box;
+      }
+
+      .containerh1 {
+        width: 95rem;
+        margin: 0 auto;
+      }
+
+      #container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        width: 1000px;
+        text-align: center;
+      }
+
+      h1 {
+        font-family: "Megrim", sans-serif;
+        font-size: 6rem;
+        color: #ffffff;
+        /* transform: skewY(-5deg); */
+        text-align: center;
+        position: relative;
+        word-spacing: 3px;
+      }
+
+      h1::before {
+        content: "";
+        display: block;
+        height: 65%;
+        width: 49%;
+        position: absolute;
+        top: 105%;
+        left: 50%;
+        opacity: 0.8;
+        z-index: -1;
+        transform: skewY(370deg) translate(-50%, -50%);
+      }
+
+      form {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      input[type="number"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+
+      button {
+        background-color: #ed2872;
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 10px 80px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        font-size: 2rem; /* Increase font size */
+        display: block;
+        margin: 2rem auto; /* Center the button and add some margin */
+      }
+
+      button:hover {
+        background-color: #8f073b;
+      }
+
+      .poolCards {
+        background: white;
+        box-shadow: 0 2rem 6rem 1rem #900239;
+        margin-bottom: 3rem;
+        display: flex;
+        transition: all 0.5s;
+      }
+
+      #poolList {
+        text-align: left;
+        padding: 20px;
+        border-top: 1px solid #ccc;
+      }
+
+      hr {
+        margin: 20px 0;
+        border: none;
+        border-top: 1px solid #ccc;
+      }
+
+      .main-content {
+        flex: 1;
+      }
+
+      .footer {
+        text-align: center;
+        padding: 1rem;
+        background-color: #f7f7f7;
+      }
+
+      .footer-text {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .github-logo {
+        width: 24px;
+        height: 24px;
+        margin-top: 0.5rem;
+      }
+    </style>
+    <!-- <script defer src="../modules/renderPairs.js"></script> -->
+  </head>
+  <body>
+    <div class="containerh1 main-content">
+      <h1>Uniswap Eagle 🦅</h1>
+
+      <form id="getPoolsForm">
+        <label for="numberOfPools">Number of Pools:</label>
+        <input
+          type="number"
+          id="numberOfPools"
+          name="numberOfPools"
+          value="5"
+        />
+        <button type="submit">Get Pools</button>
+      </form>
+
+      <div id="poolList"></div>
+    </div>
+
+    <footer class="footer">
+      <div class="footer-text">
+        Built with
+        <a href="https://chainstack.com/" target="_blank"
+          >Chainstack-Subgraph</a
+        >
+        and Nodejs 🟩
+      </div>
+      <a href="https://github.com/midesofek/uniswap-eagle" target="_blank">
+        <img
+          class="github-logo"
+          src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+          alt="GitHub Logo"
+        />
+      </a>
+    </footer>
+
+    <script>
+      document
+        .getElementById("getPoolsForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault();
+
+          const numberOfPools = document.getElementById("numberOfPools").value;
+          const response = await fetch("/getLiquidityPoolsDetails", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: `numberOfPools=${numberOfPools}`,
+          });
+
+          const pools = await response.json();
+          const poolList = document.getElementById("poolList");
+          poolList.innerHTML = "";
+
+          pools.forEach((pool) => {
+            const poolInfo = `
+            <figure class="poolCards">
+            <div>
+            <p>Pool ID: ${pool.id}</p>
+            <p>Token Pair 1</p>
+            <ul>
+              <li>Token Name: ${pool.token0.name}</li>
+              <li>Contract Address: ${pool.token0.id}</li>
+              <li>Token Symbol: ${pool.token0.symbol}</li>
+            </ul>
+            <p>Token Pair 2</p>
+            <ul>
+              <li>Token Name: ${pool.token1.name}</li>
+              <li>Contract Address: ${pool.token1.id}</li>
+              <li>Token Symbol: ${pool.token1.symbol}</li>
+            </ul>
+            <ul>
+              <li> <a href="http://etherscan.io/address/${pool.token0.id}" target="_blank">View on Etherscan</a> </li>
+            </ul>
+          </div>
+          </figure>
+          <hr>
+        `;
+
+            poolList.innerHTML += poolInfo;
+          });
+        });
+    </script>
+  </body>
+</html>

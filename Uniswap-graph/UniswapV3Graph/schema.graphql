@@ -1,0 +1,14 @@
+type Pool @entity {
+  id: ID! #id
+  token0: Token! #first token in the pair
+  token1: Token! #second token in the pair
+  feeAmount: BigInt! #The desired fee for the pool
+  timestamp: BigInt! #the block timestamp
+  blockNumber: BigInt! #block number
+}
+
+type Token @entity {
+  id: ID!
+  symbol: String! #token symbol
+  name: String! #token name
+}
